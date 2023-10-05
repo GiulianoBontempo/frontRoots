@@ -1,0 +1,53 @@
+/* Estilo para o contêiner principal do aplicativo */
+.dndflow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Altura igual à altura da janela do navegador */
+  width: 98.62vw; /* Largura igual a 98.62% da largura da janela do navegador */
+}
+
+/* Estilo para o conteúdo do lado esquerdo do aplicativo (os elementos arrastáveis) */
+.dndflow aside {
+  margin: 0.5em 2em; /* Margens ao redor dos elementos do lado esquerdo */
+}
+
+/* Estilo para a coluna direita do aplicativo (onde provavelmente o botão é renderizado) */
+.dndflow-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%; /* Largura da coluna é 20% do contêiner principal */
+  max-width: 250px; /* Largura máxima da coluna */
+  border-left: 1px solid #eee; /* Borda esquerda da coluna */
+  background: #fcfcfc; /* Cor de fundo da coluna */
+  padding: 15px 10px; /* Preenchimento interno da coluna */
+}
+
+/* Estilo para uma descrição (talvez associada a algum elemento específico) */
+.dndflow .description {
+  margin-bottom: 10px; /* Margem inferior da descrição */
+}
+
+/* Estilo para os elementos arrastáveis no lado esquerdo do aplicativo */
+.dndflow .dndnode {
+  height: 20px; /* Altura dos elementos arrastáveis */
+  padding: 4px; /* Preenchimento interno dos elementos arrastáveis */
+  border-radius: 2px; /* Borda arredondada dos elementos arrastáveis */
+  margin-bottom: 10px; /* Margem inferior dos elementos arrastáveis */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab; /* Altera o cursor para o ícone de mão (indicando que o elemento pode ser arrastado) */
+}
+
+/* Estilo para o contêiner principal do React Flow */
+.dndflow .reactflow-wrapper {
+  flex-grow: 1; /* Cresce para ocupar o espaço disponível */
+  height: 100%; /* Altura igual à altura do contêiner principal */
+}
+
+/* Estilo para algum elemento com a classe 'selectall' (não é especificado no código fornecido) */
+.dndflow .selectall {
+  margin-top: 10px; /* Margem superior para elementos com a classe 'selectall' */
+}

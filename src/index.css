@@ -1,0 +1,75 @@
+/* Definindo variáveis globais do site */
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; /* Fonte padrão */
+  line-height: 1.5; /* Espaçamento entre linhas padrão */
+  font-weight: 400; /* Peso da fonte padrão */
+  
+  color-scheme: light dark; /* Habilita o esquema de cores light/dark */
+  color: rgba(255, 255, 255, 0.87); /* Cor do texto padrão */
+  background-color: #ffffff; /* Cor de fundo padrão */
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Estilo para links */
+a {
+  font-weight: 500;
+  color: #646cff; /* Cor dos links */
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2; /* Cor dos links ao passar o mouse */
+}
+
+/* Estilo para o corpo da página */
+body {
+  margin: 0; /* Remove margens padrão */
+  display: flex; /* Usa display flex para centralizar o conteúdo verticalmente e horizontalmente */
+  place-items: center;
+  min-width: 320px; /* Largura mínima da página */
+  min-height: 100vh; /* Altura mínima da página */
+}
+
+/* Estilo para cabeçalhos h1 */
+h1 {
+  font-size: 3.2em; /* Tamanho da fonte para h1 */
+  line-height: 1.1; /* Espaçamento entre linhas para h1 */
+}
+
+/* Estilo para botões */
+button {
+  border-radius: 8px; /* Borda arredondada do botão */
+  border: 1px solid transparent; /* Borda transparente */
+  padding: 0.6em 1.2em; /* Espaçamento interno do botão */
+  font-size: 1em; /* Tamanho da fonte do botão */
+  font-weight: 500; /* Peso da fonte do botão */
+  font-family: inherit;
+  background-color: #1a1a1a; /* Cor de fundo do botão */
+  cursor: pointer; /* Altera o cursor para uma mão ao passar o mouse sobre o botão */
+  transition: border-color 0.25s; /* Transição para a cor da borda do botão */
+}
+button:hover {
+  border-color: #646cff; /* Cor da borda do botão ao passar o mouse sobre ele */
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color; /* Estilo de foco para botões */
+}
+
+/* Estilos para dispositivos com esquema de cores claro */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547; /* Cor do texto para esquema de cores claro */
+    background-color: #ffffff; /* Cor de fundo para esquema de cores claro */
+  }
+  a:hover {
+    color: #747bff; /* Cor dos links ao passar o mouse para esquema de cores claro */
+  }
+  button {
+    background-color: #f9f9f9; /* Cor de fundo do botão para esquema de cores claro */
+  }
+}
