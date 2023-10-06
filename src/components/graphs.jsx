@@ -33,6 +33,7 @@ var maxTankId = 0;
 var maxValveId = 0;
 var maxInputOutputId = 0;
 var maxId = 0;
+var cou = 0;
 
 const getIdTank = () => `${maxId++}`;
 const getIdHub = () => `${maxId++}`;
@@ -77,7 +78,6 @@ const DnDFlow = () => {
   nodeNames = nodes.map(node => node.data.label);
 
   // Página
-  const page = document.addEventListener("click", showPath())
 
   // Função para buscar as arestas do backend
   const getEdgesFromBackend = async () => {
@@ -178,7 +178,13 @@ const DnDFlow = () => {
         adjacencyMatrix[sourceIndex][targetIndex] = 1;
         adjacencyMatrix[targetIndex][sourceIndex] = 1;
       }
-      showPath() // Chama a função showPath()
+      if(cou == 60){
+        showPath()
+        cou = 0
+      } else {
+        cou += 1
+      }
+      // Chama a função showPath()
 
     } catch (error) {
       console.log(error)
@@ -841,7 +847,6 @@ const DnDFlow = () => {
           "nameOrNumberEnd": targetName
         }),
       });
-
       if (response.ok) {
         console.log('edge deletado com sucesso no backend!');
         console.log(sourceName + " -> " + targetName);
@@ -880,39 +885,32 @@ const DnDFlow = () => {
     setSelectedNodeId(element.id);
   };
 
-  const handleClickEdge = (event,edge) => {
-    setEdges((prevEdges) => 
-      prevEdges.map((prevEdge) => {
-        if(prevEdge.source == edge.source && prevEdge.target == edge.target){
-          return{...prevEdge,};
-        } else {
-          return{...prevEdge,};
-        }
-      })  
-    )
-    setSelectedEdge(selectedEdge === 1 ? 2 : 1)
-    setSelectedEdgeSo(edge.source)
-    setSelectedEdgeTa(edge.target)
-    setLastSelect("edge")
-  }
-
+  //Função que seleciona a aresta
   const selectE = (event, element) => {
-    event.preventDefault();
-    handleClickEdge(event,element);
+    setSelectedEdge(element)
+    console.log(nodes.find(node => element.source == node.id).data.label)
     setSelectedEdgeSo(element.source)
     setSelectedEdgeTa(element.target)
+    setLastSelect("edge")
   }
 
 
   // Função para destacar caminho no gráfico
   function showPath() {
-    edges.forEach(edge => {
-      edge.style = { strokeWidth: "1px", stroke: "gray" };
-      for (var i = 0; i < nodeNames.length - 1; i++)
-        if (edge.source == nodesPath[i] && edge.target == nodesPath[i + 1]) {
-          edge.style = { strokeWidth: "5px", stroke: "green" };
+    if(edges.length > 0){
+      var change = []
+      edges.forEach(edge => {
+        edge.style = { strokeWidth: "1px", stroke: "gray" };
+        for (var i = 0; i < nodeNames.length - 1; i++){
+          if (edge.source == nodesPath[i] && edge.target == nodesPath[i + 1]) {
+            edge.style = { strokeWidth: "5px", stroke: "green" };
+          }
         }
-    })
+        change.push(edge)
+      })
+      setEdges(current =>[...change])
+    }
+
   };
 
   // Callback para o evento de soltar um elemento no painel
@@ -997,7 +995,7 @@ const DnDFlow = () => {
     setOpenDeleteAllModal(true);
   }
 
-
+  //Função que decide se é um nó ou uma aresta que será excluida
   const deleteSelected = async () =>{
     if(lastSelect==="node"){
       deleteSelectedNode()
@@ -1006,10 +1004,12 @@ const DnDFlow = () => {
     }
   }
 
+  //FUnção para deletar a aresta selecionada
   const deleteSelectedEdge = async () => {
     const aresta = edges.find((edge) => edge.source == selectedEdgeSo && edge.target === selectedEdgeTa)
-    const nodeS = nodes.find(node => node.id == aresta.source)
-    const nodeT = nodes.find(node => node.id == aresta.target)
+    const nodeS = nodes.find(node => node.id == selectedEdgeSo)
+    const nodeT = nodes.find(node => node.id == selectedEdgeTa)
+    setEdges(prevEdge => prevEdge.filter((edge) => edge.source != nodeS.id && edge.target != nodeT.id))
     deleteEdgeOnBackend(nodeS.data.label, nodeS.type, nodeT.data.label, nodeT.type)
   }
 
@@ -1042,6 +1042,7 @@ const DnDFlow = () => {
     }
   };
 
+  //Função que executa o modal quando o nó é clicado duas vezes
   const handleNodeDoubleClick = (event, node) => {
     event.stopPropagation();
     setDblClickedNode(node.data.label);
@@ -1087,8 +1088,8 @@ const DnDFlow = () => {
       <BasicModal open={openModal} setOpen={setOpenModal} name={dblClickedNode} type={modalType} setNodes={setNodes} nodes={nodes} />
       <DeleteAllModal open={openDeleteAllModal} setOpen={setOpenDeleteAllModal} />
       <div style={{ position: "absolute", top: "90%", left: "70%" }}>
-        <IconButton>
-          <DeleteForeverIcon onClick={deleteAllNodesAndConnections} fontSize="large" style={{ color: 'green' }} aria-label="Deletar tudo" />
+        <IconButton onClick={deleteAllNodesAndConnections}>
+          <DeleteForeverIcon fontSize="large" style={{ color: 'green' }} aria-label="Deletar tudo" />
         </IconButton>
       </div>
     </div>

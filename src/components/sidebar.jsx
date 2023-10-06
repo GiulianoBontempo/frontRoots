@@ -125,12 +125,14 @@ const Sidebar = () => {
   const [edgesCsvData, setEdgesCsvData] = useState(null); // Dados CSV para arestas
   const [nodesCsvData, setNodesCsvData] = useState(null); // Dados CSV para nós
   const [counter, setCounter] = useState(0);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const [open, setOpen] = React.useState(false); //Controlodor do modal do manual de usuário
+  const handleOpen = () => setOpen(true); 
   const handleClose = () => setOpen(false);
-  const [open1, setOpen1] = React.useState(false);
+  const [open1, setOpen1] = React.useState(false); //Controlodor do modal do manual de usuário
   const handleOpen1 = () => setOpen1(true);
   const handleClose1 = () => setOpen1(false);
+  const [pathList, setPathList] = useState([]); //Novo estado para armazenar as diversas pathStr
+
 
   // Manipuladores de importação de CSV para arestas e nós
   const handleUploadEdges = async () => {
@@ -202,8 +204,7 @@ const Sidebar = () => {
 
   // Manipulador de exportação para Excel
   const handleExportExcel = () => {
-    // Filter nodeNames to only include those that start with "Valve"
-    const filteredNodeNames = nodeNames.filter(name => (name.startsWith("Valve") || name.startsWith("Hub")));
+    const filteredNodeNames = nodeNames.filter((name => (name.startsWith("Valve") || name.startsWith("Hub"))));
     const namesWithout = []
     var namesChange = []
     filteredNodeNames.forEach(nodename => {
@@ -217,37 +218,38 @@ const Sidebar = () => {
     })
     const a = [...new Set(namesChange)];
   
-    // Create a new workbook
+    
     const workbook = XLSX.utils.book_new();
   
-    // Create a new worksheet with headers
-    const headers = ["Caminhos"]; // Initialize with "Caminhos" in the first cell
-    headers.push(...namesWithout.concat(a)); // Add filtered nodeNames after "Caminhos"
+    
+    const headers = ["Caminhos"]; 
+    headers.push(...namesWithout.concat(a)); 
   
-    const worksheetData = [headers];
-  
-    // Create the row for valves
-    const valveRow = [];
-    for (const valveName of namesWithout) {
-      if (pathStr.includes(valveName)) {
-        valveRow.push("O");
-      } else {
-        valveRow.push(" ");
+    const worksheetData = [["Caminhos", ...namesWithout.concat(a)]];
+     pathList.forEach(path => {
+      const valveRow = [];
+      for (const valveName of namesWithout) {
+        if (path.includes(valveName)) {
+          valveRow.push("O");
+        } else {
+          valveRow.push(" ");
+        }
       }
-    }
-    const valChange = []
-    for(const name of a){
-      console.log(name)
-      if(pathStr.includes(name.concat("_ON"))){
-        valChange.push("O");
-      } else if(pathStr.includes(name.concat("_OFF"))){
-        valChange.push("X");
-      } else {
-        valChange.push(" ")
+      const valChange = [];
+      for (const name of a) {
+        if (path.includes(name.concat("_ON"))) {
+          valChange.push("O");
+        } else if (path.includes(name.concat("_OFF"))) {
+          valChange.push("X");
+        } else {
+          valChange.push(" ");
+        }
       }
-    }
+
+      worksheetData.push([path, ...valveRow.concat(valChange)]);
+    });
   
-    worksheetData.push([pathStr, ...valveRow.concat(valChange)]); // Add pathStr in the first cell and then valveRow
+   
   
     const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
   
@@ -284,7 +286,9 @@ const Sidebar = () => {
       passos = "Caminho impossível"
     }
     pathStr = passos
-    passos = ""
+    // Add pathStr to the list
+    setPathList(prevList => [...prevList, pathStr]);
+    passos = ""; // Reset passos para o próximo cálculo
     handleOpen1();
 
   };
